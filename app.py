@@ -1,10 +1,13 @@
 import dash
 import dash_daq as daq
 import dash_html_components as html
+from blinkstick import blinkstick
 
 app=dash.Dash()
 
 server = app.server
+
+bstick = blinkstick.find_first()
 
 app.scripts.config.serve_locally = True
 app.css.config.serve_locally = True
@@ -66,6 +69,7 @@ def set_led_color(color):
     [dash.dependencies.Input('color-picker', 'value')])
 def set_led_color(color):
     app_style['backgroundColor'] = color['hex']
+    bstick.set_color(hex=color['hex'])
     return app_style
 
 if __name__ == '__main__':
