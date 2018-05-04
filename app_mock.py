@@ -2,7 +2,7 @@ import dash
 import dash_daq as daq
 import dash_html_components as html
 
-app=dash.Dash()
+app = dash.Dash()
 
 server = app.server
 
@@ -23,9 +23,12 @@ app.layout = html.Div(
     id='container',
     children=[
         daq.DarkThemeProvider(
-            theme=dict(dark=True), 
+            theme=dict(dark=True),
             children=[
-                html.Link(rel='stylesheet', href='http://codepen.io/plotly/pen/mLMoGg.css'),
+                html.Link(
+                    rel='stylesheet',
+                    href='http://codepen.io/plotly/pen/mLMoGg.css'
+                ),
                 html.Div(
                     style=dict(
                         background='#2a3f5f',
@@ -55,18 +58,21 @@ app.layout = html.Div(
     ]
 )
 
+
 @app.callback(
     dash.dependencies.Output('led', 'color'),
     [dash.dependencies.Input('color-picker', 'value')])
-def set_led_color(color):    
+def set_led_color(color):
     return color['hex']
+
 
 @app.callback(
     dash.dependencies.Output('container', 'style'),
     [dash.dependencies.Input('color-picker', 'value')])
-def set_led_color(color):
+def set_background_color(color):
     app_style['backgroundColor'] = color['hex']
     return app_style
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
