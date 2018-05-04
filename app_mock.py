@@ -4,6 +4,8 @@ import dash_html_components as html
 
 app=dash.Dash()
 
+server = app.server
+
 app.scripts.config.serve_locally = True
 app.css.config.serve_locally = True
 
