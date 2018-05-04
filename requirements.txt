@@ -4,3 +4,6 @@ dash-html-components==0.10.1
 dash-core-components==0.22.1
 gunicorn
 dash_daq-0.0.1.tar.gz
+pylint
+flake8
+blinkstick
