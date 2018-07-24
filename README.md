@@ -31,12 +31,12 @@ and all of the required `pip` packages,  will be installed, and the app will be 
 ## How to use the app
 There are two versions of this application. A mock version for the user to play with, without any instruments connected, and a local version, that can be connected to a device.
 
-If you would like to run the local version, please connect the device to the USB port on your computer, and run in the command line:
+If you would like to run the __**local version**__, please connect the device to the USB port on your computer, and run in the command line:
 
 ``` 
 python app.py
 ```
-![changefail](screenshots/pythonapp.JPG)
+![changefail](screenshots/pythonapp.jpg)
 
 and you should see this:
 
@@ -49,13 +49,13 @@ Open the web address given to you in your browser like so:
 If the app is run, but the device is not connected you will see something like this:
 ![changefail](screenshots/notplugedin.JPG)
 
-If you would like to run the mock version, run in the command line:
+If you would like to run the __**mock version**__, run in the command line:
 
 ```
 python app_mock.py 
 ```
 
-![changefail](screenshots/pythonapp_mock.JPG)
+![changefail](screenshots/pythonapp_mock.jpg)
 
 and you should see this:
 
