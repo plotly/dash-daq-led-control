@@ -42,7 +42,7 @@ and you should see this:
 
 ![changefail](screenshots/runapp.JPG)
 
-Open the web address given to you in your browser like so:
+Open the web address given to you in your browser and your application be ready for use:
 
 ![changefail](screenshots/openport.JPG)
 
@@ -61,7 +61,7 @@ and you should see this:
 
 ![changefail](screenshots/runmock.JPG)
 
-Open the web address given to you in your browser like so:
+Open the web address given to you in your browser and your application be ready for use:
 
 ![changefail](screenshots/openport.JPG)
 
