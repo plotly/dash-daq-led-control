@@ -31,6 +31,7 @@ and all of the required `pip` packages,  will be installed, and the app will be 
 ## How to use the app
 There are two versions of this application. A mock version for the user to play with, without any instruments connected, and a local version, that can be connected to a device.
 
+### Local Application
 If you would like to run the __**local version**__, please connect the device to the USB port on your computer, and run in the command line:
 
 ``` 
@@ -50,6 +51,7 @@ If the app is run, but the device is not connected you will see something like t
 
 ![changefail](screenshots/notplugedin.JPG)
 
+### Mock Application
 If you would like to run the __**mock version**__, run in the command line:
 
 ```
