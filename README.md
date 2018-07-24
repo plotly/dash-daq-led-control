@@ -42,11 +42,12 @@ and you should see this:
 
 ![changefail](screenshots/runapp.JPG)
 
-Open the web address given to you in your browser and your application be ready for use:
+Open the web address given to you in your browser and the application will be ready for use:
 
 ![changefail](screenshots/openport.JPG)
 
 If the app is run, but the device is not connected you will see something like this:
+
 ![changefail](screenshots/notplugedin.JPG)
 
 If you would like to run the __**mock version**__, run in the command line:
@@ -61,7 +62,7 @@ and you should see this:
 
 ![changefail](screenshots/runmock.JPG)
 
-Open the web address given to you in your browser and your application be ready for use:
+Open the web address given to you in your browser and the application will be ready for use:
 
 ![changefail](screenshots/openport.JPG)
 
