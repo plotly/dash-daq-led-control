@@ -6,6 +6,10 @@ from dash_daq import DarkThemeProvider as DarkThemeProvider
 from dash.dependencies import State, Input, Output
 from blinkstick import blinkstick
 
+# Convert Hex to RGB
+def hex_convert_rgb(value):
+    value = value.lstrip('#')
+    return tuple(int(value[i:i+2], 16) for i in (0, 2 ,4))
 
 app = dash.Dash()
 
@@ -24,11 +28,7 @@ external_css = [
 ]
 
 # Blinkstick Open Port
-# bstick = blinkstick.find_first()
-
-# Convert rgb to hex
-def rgb_convert_hex(r, g, b):
-    return "#%02x%02x%02x" % (r, g, b)
+bstick = blinkstick.find_first()
 
 
 for css in external_css:
@@ -348,6 +348,187 @@ def page_layout(value):
         return light_theme
 
 
+# Color Picker LED
+@app.callback(
+    Output('color-send', 'children'),
+    [Input('color-picker', 'value'),
+     Input("all-switch", 'on')]
+)
+
+def colorpick_all(value, all_switch):
+    if all_switch == True:
+        value = value["hex"]
+        hex_color = hex_convert_rgb(value)
+        r = int(hex_color[0])
+        b = int(hex_color[1])
+        g = int(hex_color[2])
+        for i in range(0, 8):
+            bstick.set_color(0, i, r, b, g)
+        return value
+
+
+# Led Select Color Picker
+@app.callback(
+    Output('color-individual', 'children'),
+    [Input('color-picker', 'value'),
+     Input("led-select", 'value')]
+)
+def colorpick_individual(value, led_select):
+    if led_select >= 1:
+        value = value["hex"]
+        hex_color = hex_convert_rgb(value)
+        r = int(hex_color[0])
+        b = int(hex_color[1])
+        g = int(hex_color[2])
+        led_select = led_select - 1  
+        bstick.set_color(0, led_select, r, b, g)
+        return value
+
+
+# Led Rainbow Switch
+@app.callback(
+    Output('color-rainbow', 'children'),
+    [Input("rainbow-switch", "on")]
+)
+
+def rainbow_switch(rainbow):
+    if rainbow == True:
+        bstick.set_color(0, 0, 255, 0, 0)
+        bstick.set_color(0, 1, 226, 87, 30)
+        bstick.set_color(0, 2, 255, 127, 0)
+        bstick.set_color(0, 3, 255, 249, 3)
+        bstick.set_color(0, 4, 0, 255, 0)
+        bstick.set_color(0, 5, 0, 0, 255)
+        bstick.set_color(0, 6, 75, 0, 130)
+        bstick.set_color(0, 7, 255, 255, 255)   
+
+
+# Slider Led
+@app.callback(
+    Output('color-slide', 'children'),
+    [Input('led-slide', 'value'),
+    Input('color-picker', 'value')],
+    [State('all-switch', 'on'),
+     State("rainbow-switch", "on"),
+     State("led-select", "value")]
+)
+def led_slide(
+    slide, 
+    value, 
+    all_switch, 
+    rainbow_switch, 
+    led_select
+    ):
+
+    if all_switch == False and rainbow_switch == False and led_select == 0:
+        value = value["hex"]
+        hex_color = hex_convert_rgb(value)
+        r = int(hex_color[0])
+        b = int(hex_color[1])
+        g = int(hex_color[2])
+        
+        for i in range (slide, 9):
+            bstick.set_color(0, i, 0, 0, 0)
+        for i in range (0, slide):
+            bstick.set_color(0, i, r, b, g) 
+        return value
+    
+
+
+# Default Off
+@app.callback(
+    Output('color-off', 'children'),
+    [Input('rainbow-switch', 'on'),
+     Input('all-switch', 'on'),
+     Input('led-select', 'value'),
+     Input('led-slide', 'value')],
+     [State('power', 'on')]
+)
+def color_off(
+    rainbow_switch, 
+    all_switch, 
+    led_select, 
+    led_slide, 
+    power
+    ):
+
+    if rainbow_switch == False and all_switch == False and led_select == 0 and led_slide == 0:
+        bstick.set_color(0, 0, 0, 0, 0)
+        bstick.set_color(0, 1, 0, 0, 0)
+        bstick.set_color(0, 2, 0, 0, 0)
+        bstick.set_color(0, 3, 0, 0, 0)
+        bstick.set_color(0, 4, 0, 0, 0)
+        bstick.set_color(0, 5, 0, 0, 0)
+        bstick.set_color(0, 6, 0, 0, 0)
+        bstick.set_color(0, 7, 0, 0, 0)
+
+
+#Color Picker
+@app.callback(
+    Output("led-slide", "color"),
+    [Input("color-picker", "value")]
+)
+def color_picker(value):
+    value = value["hex"]
+    return value
+
+
+@app.callback(
+    Output("power", "color"),
+    [Input("color-picker", "value")]
+)
+def color_picker(value):
+    value = value["hex"]
+    return value
+
+
+@app.callback(
+    Output("rainbow-switch", "color"),
+    [Input("color-picker", "value")]
+)
+def color_picker(value):
+    value = value["hex"]
+    return value
+
+
+@app.callback(
+    Output("all-switch", "color"),
+    [Input("color-picker", "value")]
+)
+def color_picker(value):
+    value = value["hex"]
+    return value
+
+
+@app.callback(
+    Output("color-return", "children"),
+    [Input("color-picker", "value")]
+)
+def color_picker(value):
+    value = value["hex"]
+    return value
+
+
+@app.callback(
+    Output("container", "style"),
+    [Input("color-return", "children")]
+)
+def color_picker(color):
+    style = {"background-color": ""}
+    style["background-color"] = color
+    return style
+
+
+@app.callback(
+    Output("LED-PANEL", "style"),
+    [Input("color-return", "children")]
+)
+def color_picker(color):
+    style = {"color": "", "textAlign":"center", "marginTop":"5%"}
+    style["color"] = color
+    return style
+
+
 # LED Color Change All
 @app.callback(
     Output('led-1', 'color'),
@@ -637,204 +818,6 @@ def colorpick(
         return value_individual 
 
 
-# Color Picker LED
-@app.callback(
-    Output('color-send', 'children'),
-    [Input('color-picker', 'value'),
-     Input("all-switch", 'on')]
-)
-
-def colorpick_all(value, all_switch):
-    if all_switch == True:
-        r = value['rgb']['r']
-        b = value['rgb']['g']
-        g = value['rgb']['b']
-
-        hex_color = rgb_convert_hex(r,b,g)
-        for i in range(0, 8):
-            bstick.set_color(0, i, r, b, g)
-        return hex_color
-
-
-# Led Select Color Picker
-@app.callback(
-    Output('color-individual', 'children'),
-    [Input('color-picker', 'value'),
-     Input("led-select", 'value')]
-)
-def colorpick_individual(value, led_select):
-    if led_select >= 1:
-        r = value['rgb']['r']
-        b = value['rgb']['g']
-        g = value['rgb']['b']
-        hex_color = rgb_convert_hex(r,b,g)
-        led_select = led_select - 1  
-        bstick.set_color(0, led_select, r, b, g)
-        return hex_color
-
-
-# Led Rainbow Switch
-@app.callback(
-    Output('color-rainbow', 'children'),
-    [Input("rainbow-switch", "on")]
-)
-
-def rainbow_switch(rainbow):
-    if rainbow == True:
-        bstick.set_color(0, 0, 255, 0, 0)
-        bstick.set_color(0, 1, 226, 87, 30)
-        bstick.set_color(0, 2, 255, 127, 0)
-        bstick.set_color(0, 3, 255, 249, 3)
-        bstick.set_color(0, 4, 0, 255, 0)
-        bstick.set_color(0, 5, 0, 0, 255)
-        bstick.set_color(0, 6, 75, 0, 130)
-        bstick.set_color(0, 7, 255, 255, 255)   
-
-
-# Slider Led
-@app.callback(
-    Output('color-slide', 'children'),
-    [Input('led-slide', 'value'),
-    Input('color-picker', 'value')],
-    [State('all-switch', 'on'),
-     State("rainbow-switch", "on"),
-     State("led-select", "value")]
-)
-def led_slide(
-    slide, 
-    value, 
-    all_switch, 
-    rainbow_switch, 
-    led_select
-    ):
-
-    if all_switch == False and rainbow_switch == False and led_select == 0:
-        r = value['rgb']['r']
-        b = value['rgb']['g']
-        g = value['rgb']['b']
-        hex_color = rgb_convert_hex(r,b,g)
-        
-        for i in range (slide, 9):
-            bstick.set_color(0, i, 0, 0, 0)
-        for i in range (0, slide):
-            bstick.set_color(0, i, r, b, g) 
-    return hex_color
-
-
-# Default Off
-@app.callback(
-    Output('color-off', 'children'),
-    [Input('rainbow-switch', 'on'),
-     Input('all-switch', 'on'),
-     Input('led-select', 'value'),
-     Input('led-slide', 'value')],
-     [State('power', 'on')]
-)
-def color_off(
-    rainbow_switch, 
-    all_switch, 
-    led_select, 
-    led_slide, 
-    power
-    ):
-
-    if rainbow_switch == False and all_switch == False and led_select == 0 and led_slide == 0:
-        bstick.set_color(0, 0, 0, 0, 0)
-        bstick.set_color(0, 1, 0, 0, 0)
-        bstick.set_color(0, 2, 0, 0, 0)
-        bstick.set_color(0, 3, 0, 0, 0)
-        bstick.set_color(0, 4, 0, 0, 0)
-        bstick.set_color(0, 5, 0, 0, 0)
-        bstick.set_color(0, 6, 0, 0, 0)
-        bstick.set_color(0, 7, 0, 0, 0)
-
-
-#Color Picker
-@app.callback(
-    Output("led-slide", "color"),
-    [Input("color-picker", "value")]
-)
-def color_picker(value):
-        r = value['rgb']['r']
-        b = value['rgb']['g']
-        g = value['rgb']['b']
-
-        hex_color = rgb_convert_hex(r,b,g)
-        return hex_color
-
-
-@app.callback(
-    Output("power", "color"),
-    [Input("color-picker", "value")]
-)
-def color_picker(value):
-        r = value['rgb']['r']
-        b = value['rgb']['g']
-        g = value['rgb']['b']
-
-        hex_color = rgb_convert_hex(r,b,g)
-        return hex_color
-
-
-@app.callback(
-    Output("rainbow-switch", "color"),
-    [Input("color-picker", "value")]
-)
-def color_picker(value):
-    r = value['rgb']['r']
-    b = value['rgb']['g']
-    g = value['rgb']['b']
-
-    hex_color = rgb_convert_hex(r,b,g)
-    return hex_color
-
-
-@app.callback(
-    Output("all-switch", "color"),
-    [Input("color-picker", "value")]
-)
-def color_picker(value):
-    r = value['rgb']['r']
-    b = value['rgb']['g']
-    g = value['rgb']['b']
-
-    hex_color = rgb_convert_hex(r,b,g)
-    return hex_color
-
-
-@app.callback(
-    Output("color-return", "children"),
-    [Input("color-picker", "value")]
-)
-def color_picker(value):
-    r = value['rgb']['r']
-    b = value['rgb']['g']
-    g = value['rgb']['b']
-
-    hex_color = rgb_convert_hex(r,b,g)
-    return hex_color
-
-
-@app.callback(
-    Output("container", "style"),
-    [Input("color-return", "children")]
-)
-def color_picker(color):
-    style = {"background-color": ""}
-    style["background-color"] = color
-    return style
-
-
-@app.callback(
-    Output("LED-PANEL", "style"),
-    [Input("color-return", "children")]
-)
-def color_picker(color):
-    style = {"color": "", "textAlign":"center", "marginTop":"5%"}
-    style["color"] = color
-    return style
-
-
 # Disabler
 @app.callback(
     Output('all-switch', 'on'),
@@ -904,4 +887,4 @@ def disabler(led_slide):
 
 if __name__ == "__main__":
 
-    app.run_server(debug=True)
+    app.run_server(debug=False)
