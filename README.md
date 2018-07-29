@@ -78,6 +78,6 @@ Open the web address given to you in your browser and the application will be re
 
 
 ## Resources
-The Blinkstick API is used in this application, and has a ton of features. If you need some help figuring out the Blinkstick API check out the documentation [here](https://www.blinkstick.com/documentation/python/frames.html). Too install the Blinkstick API go [here](https://github.com/arvydas/blinkstick-python). If you have trouble using the API with Python 3, check out this [fix](https://github.com/arvydas/blinkstick-python/issues/34)
+The Blinkstick API is used in this application, and has a ton of features. If you need some help figuring out the Blinkstick API check out the documentation [here](https://www.blinkstick.com/documentation/python/frames.html). Too install the Blinkstick API go [here](https://github.com/arvydas/blinkstick-python). If you have trouble using the API with Python 3, check out this [fix](https://github.com/arvydas/blinkstick-python/issues/34).
 
 
