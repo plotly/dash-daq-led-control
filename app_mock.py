@@ -7,7 +7,7 @@ from dash_daq import DarkThemeProvider as DarkThemeProvider
 from blinkstick import blinkstick
 
 
-app = dash.Dash()
+app = dash.Dash(__name__)
 
 server = app.server
 
