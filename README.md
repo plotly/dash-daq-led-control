@@ -1,7 +1,7 @@
 # Dash-Blinkstick
 
 ## Introduction
-A mock app to control a [LED Blinkstick](https://www.blinkstick.com/products/blinkstick-strip), an LED stick you can control from your computer! [Play with the demo](https://dash-daq-led.herokuapp.com/) and learn more about this application from our [blog entry](https://www.dashdaq.io/control-an-led-strip-in-python).
+A mock app to control a [LED Blinkstick](https://www.blinkstick.com/products/blinkstick-strip), an LED stick you can control from your computer! [Play with the demo](https://dash-gallery.plotly.host/dash-daq-led-control/) and learn more about this application from our [blog entry](https://www.dashdaq.io/control-an-led-strip-in-python).
 
 ### Light Emitting Diode Stick
 The LED BlinkStick, is an stick consisting of eight semi-conductor light emitting diodes. An diode is an electrical component that only allows electrical current to travel in one direction. When sufficient current passes through an LED, electrons cause this special diode to release energy, as photons. Photons are simply light particles, which is why we see the LED light up! This process is known as electrolumnience, to learn more read this awesome Wikipedia [page](https://en.wikipedia.org/wiki/Electroluminescence).
